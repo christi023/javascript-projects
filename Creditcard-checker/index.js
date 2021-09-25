@@ -39,4 +39,80 @@ const batch = [
 ];
 
 // Add your functions below:
-const validCred = () => {};
+
+// *************************************** FUNCTIONS
+// validate credit card
+const validateCred = (creditArr) => {
+  let reverseArr = creditArr.reverse(); // reverse arr
+  let len = creditArr.length - 1; // getting card number length (16)
+  let sum = 0;
+
+  for (let i = 0; i < creditArr.length; i++) {
+    let calculatedAmount = reverseArr[i];
+
+    // every other digit is doubled
+    if (i !== 0 && i % 2 === 0) {
+      calculatedAmount = reverseArr[i] * 2;
+
+      // if the doubled amount it gt 9
+      if (calculatedAmount > 9) {
+        calculatedAmount = calculatedAmount - 9;
+        sum += calculatedAmount;
+      } else {
+        sum += calculatedAmount;
+      }
+    } else {
+      sum += reverseArr[i];
+    }
+  }
+  return sum % 10 === 0 ? true : false;
+};
+
+// validating multiple cards
+const findInvalidCards = (arr) => {
+  const falseCards = [];
+
+  // grabbing nested arrays
+  for (let i = 0; i < arr.length; i++) {
+    let creditCard = arr[i];
+    if (validateCred(creditCard) === false) {
+      falseCards.push(arr[i]);
+    }
+  }
+  return falseCards;
+};
+
+// identifying companies that issued faulty numbers
+const idInvalidCardCompanies = (arr) => {
+  let companies = [];
+  // getting first numbers from all nested credit cards
+  for (let i = 0; i < arr.length; i++) {
+    let origArr = arr[i].reverse();
+    companies.push(origArr[0]);
+  }
+  // getting unique values
+  let uniqueChars = [...new Set(companies)];
+  // print out companies that mailed out invalid credit card numbers
+  for (let i = 0; i < uniqueChars.length; i++) {
+    if (uniqueChars[i] === 3) {
+      console.log('Amex');
+    } else if (uniqueChars[i] === 4) {
+      console.log('Visa');
+    } else if (uniqueChars[i] === 5) {
+      console.log('Mastercard');
+    } else if (uniqueChars[i] === 6) {
+      console.log('Discover');
+    } else {
+      console.log('Company not found');
+    }
+  }
+};
+
+// question 7.
+const formattingString = (str) => {
+  let creditCard = str.split('');
+  console.log(creditCard);
+};
+
+idInvalidCardCompanies(findInvalidCards(batch));
+formattingString('1234567');
